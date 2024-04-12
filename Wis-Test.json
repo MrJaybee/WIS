@@ -108,15 +108,23 @@
         "schedules_shutdown_computevm_web_tiervm2_name": {
             "defaultValue": "shutdown-computevm-web-tiervm2",
             "type": "String"
+        },
+        "SQL_administratorLogin": {
+            "type": "string"
+        },
+        "SQL_Password": {
+            "type": "securestring"
         }
     },
-    "variables": {},
+    "variables": {
+        "tags": "Wis"
+    },
     "resources": [
         {
             "type": "Microsoft.KeyVault/vaults",
             "apiVersion": "2023-07-01",
             "name": "[parameters('vaults_Wis_TestVault_name')]",
-            "location": "eastus",
+            "location": "[resourceGroup().location]",
             "tags": {
                 "Wis": "Wis"
             },
@@ -125,7 +133,7 @@
                     "family": "A",
                     "name": "Standard"
                 },
-                "tenantId": "bc5585e5-c9bd-4b46-94e2-28ef0bfdfa23",
+                "tenantId": "[subscription().tenantId]",
                 "networkAcls": {
                     "bypass": "AzureServices",
                     "defaultAction": "Deny",
@@ -137,18 +145,14 @@
                 "enabledForDiskEncryption": true,
                 "enabledForTemplateDeployment": true,
                 "enableSoftDelete": true,
-                "softDeleteRetentionInDays": 90,
-                "enableRbacAuthorization": true,
-                "vaultUri": "https://wis-testvault.vault.azure.net/",
-                "provisioningState": "Succeeded",
-                "publicNetworkAccess": "Disabled"
+                "softDeleteRetentionInDays": 90
             }
         },
         {
             "type": "Microsoft.Network/networkSecurityGroups",
             "apiVersion": "2023-09-01",
             "name": "[parameters('networkSecurityGroups_DB_tierVM_nsg_name')]",
-            "location": "eastus",
+            "location": "[resourceGroup().location]",
             "tags": {
                 "Wis": "Wis"
             },
@@ -160,7 +164,7 @@
             "type": "Microsoft.Network/networkSecurityGroups",
             "apiVersion": "2023-09-01",
             "name": "[parameters('networkSecurityGroups_Test_NSGs_name')]",
-            "location": "eastus",
+            "location": "[resourceGroup().location]",
             "tags": {
                 "Wis": "Wis"
             },
@@ -215,7 +219,7 @@
             "type": "Microsoft.Network/networkSecurityGroups",
             "apiVersion": "2023-09-01",
             "name": "[parameters('networkSecurityGroups_Web_tierVM1_nsg_name')]",
-            "location": "eastus",
+            "location": "[resourceGroup().location]",
             "properties": {
                 "securityRules": []
             }
@@ -224,7 +228,7 @@
             "type": "Microsoft.Network/networkSecurityGroups",
             "apiVersion": "2023-09-01",
             "name": "[parameters('networkSecurityGroups_Web_tierVM2_nsg_name')]",
-            "location": "eastus",
+            "location": "[resourceGroup().location]",
             "tags": {
                 "Wis": "Wis"
             },
@@ -236,7 +240,7 @@
             "type": "Microsoft.Network/publicIPAddresses",
             "apiVersion": "2023-09-01",
             "name": "[parameters('publicIPAddresses_DB_tierVM_ip_name')]",
-            "location": "eastus",
+            "location": "[resourceGroup().location]",
             "tags": {
                 "Wis": "Wis"
             },
@@ -248,10 +252,8 @@
                 "3"
             ],
             "properties": {
-                "ipAddress": "20.51.253.174",
                 "publicIPAddressVersion": "IPv4",
                 "publicIPAllocationMethod": "Static",
-                "idleTimeoutInMinutes": 4,
                 "ipTags": []
             }
         },
@@ -259,7 +261,7 @@
             "type": "Microsoft.Network/publicIPAddresses",
             "apiVersion": "2023-09-01",
             "name": "[parameters('publicIPAddresses_TestAppGwIPpublic_name')]",
-            "location": "eastus",
+            "location": "[resourceGroup().location]",
             "sku": {
                 "name": "Standard",
                 "tier": "Regional"
@@ -270,10 +272,8 @@
                 "3"
             ],
             "properties": {
-                "ipAddress": "172.212.119.168",
                 "publicIPAddressVersion": "IPv4",
                 "publicIPAllocationMethod": "Static",
-                "idleTimeoutInMinutes": 4,
                 "ipTags": []
             }
         },
@@ -281,16 +281,14 @@
             "type": "Microsoft.Network/publicIPAddresses",
             "apiVersion": "2023-09-01",
             "name": "[parameters('publicIPAddresses_Web_tierVM1_ip_name')]",
-            "location": "eastus",
+            "location": "[resourceGroup().location]",
             "sku": {
                 "name": "Standard",
                 "tier": "Regional"
             },
             "properties": {
-                "ipAddress": "52.191.56.119",
                 "publicIPAddressVersion": "IPv4",
                 "publicIPAllocationMethod": "Static",
-                "idleTimeoutInMinutes": 4,
                 "ipTags": []
             }
         },
@@ -298,7 +296,7 @@
             "type": "Microsoft.Network/publicIPAddresses",
             "apiVersion": "2023-09-01",
             "name": "[parameters('publicIPAddresses_Web_tierVM2_ip_name')]",
-            "location": "eastus",
+            "location": "[resourceGroup().location]",
             "tags": {
                 "Wis": "Wis"
             },
@@ -307,10 +305,8 @@
                 "tier": "Regional"
             },
             "properties": {
-                "ipAddress": "52.149.155.65",
                 "publicIPAddressVersion": "IPv4",
                 "publicIPAllocationMethod": "Static",
-                "idleTimeoutInMinutes": 4,
                 "ipTags": []
             }
         },
@@ -318,7 +314,7 @@
             "type": "Microsoft.Network/virtualNetworks",
             "apiVersion": "2023-09-01",
             "name": "[parameters('virtualNetworks_Test_VN_name')]",
-            "location": "eastus",
+            "location": "[resourceGroup().location]",
             "tags": {
                 "Wis": "Wis"
             },
@@ -379,7 +375,7 @@
             "type": "Microsoft.OperationalInsights/workspaces",
             "apiVersion": "2021-12-01-preview",
             "name": "[parameters('workspaces_Wis_TestSecCenter_name')]",
-            "location": "eastus",
+            "location": "[resourceGroup().location]",
             "tags": {
                 "Wis": "Wis"
             },
@@ -402,7 +398,7 @@
             "type": "Microsoft.RecoveryServices/vaults",
             "apiVersion": "2023-08-01",
             "name": "[parameters('vaults_TestBack_up_name')]",
-            "location": "eastus",
+            "location": "[resourceGroup().location]",
             "tags": {
                 "Wis": "Wis"
             },
@@ -438,24 +434,17 @@
             "type": "Microsoft.Sql/servers",
             "apiVersion": "2023-05-01-preview",
             "name": "[parameters('servers_servertest_sql_name')]",
-            "location": "eastus",
+            "location": "[resourceGroup().location]",
             "tags": {
                 "Wis": "Wis"
             },
             "kind": "v12.0",
             "properties": {
-                "administratorLogin": "CloudSA6c28bd98",
                 "version": "12.0",
                 "minimalTlsVersion": "1.2",
                 "publicNetworkAccess": "Disabled",
-                "administrators": {
-                    "administratorType": "ActiveDirectory",
-                    "principalType": "User",
-                    "login": "Test@remonicjbyahooco.onmicrosoft.com",
-                    "sid": "fe32d408-2c78-407e-9faf-3dc9d2599e6f",
-                    "tenantId": "bc5585e5-c9bd-4b46-94e2-28ef0bfdfa23",
-                    "azureADOnlyAuthentication": true
-                },
+                "administratorLogin": "[parameters('SQL_administratorLogin')]",
+                "administratorLoginPassword": "[parameters('SQL_Password')]",
                 "restrictOutboundNetworkAccess": "Disabled"
             }
         },
@@ -463,7 +452,7 @@
             "type": "Microsoft.Compute/virtualMachines",
             "apiVersion": "2023-03-01",
             "name": "[parameters('virtualMachines_DB_tierVM_name')]",
-            "location": "eastus",
+            "location": "[resourceGroup().location]",
             "dependsOn": [
                 "[resourceId('Microsoft.Network/networkInterfaces', parameters('networkInterfaces_db_tiervm796_z3_name'))]"
             ],
@@ -544,85 +533,10 @@
             }
         },
         {
-            "type": "microsoft.devtestlab/schedules",
-            "apiVersion": "2018-09-15",
-            "name": "[parameters('schedules_shutdown_computevm_db_tiervm_name')]",
-            "location": "eastus",
-            "dependsOn": [
-                "[resourceId('Microsoft.Compute/virtualMachines', parameters('virtualMachines_DB_tierVM_name'))]"
-            ],
-            "tags": {
-                "Wis": "Wis"
-            },
-            "properties": {
-                "status": "Enabled",
-                "taskType": "ComputeVmShutdownTask",
-                "dailyRecurrence": {
-                    "time": "1900"
-                },
-                "timeZoneId": "UTC",
-                "notificationSettings": {
-                    "status": "Disabled",
-                    "timeInMinutes": 30,
-                    "notificationLocale": "en"
-                },
-                "targetResourceId": "[resourceId('Microsoft.Compute/virtualMachines', parameters('virtualMachines_DB_tierVM_name'))]"
-            }
-        },
-        {
-            "type": "microsoft.devtestlab/schedules",
-            "apiVersion": "2018-09-15",
-            "name": "[parameters('schedules_shutdown_computevm_web_tiervm1_name')]",
-            "location": "eastus",
-            "dependsOn": [
-                "[resourceId('Microsoft.Compute/virtualMachines', parameters('virtualMachines_Web_tierVM1_name'))]"
-            ],
-            "properties": {
-                "status": "Enabled",
-                "taskType": "ComputeVmShutdownTask",
-                "dailyRecurrence": {
-                    "time": "1900"
-                },
-                "timeZoneId": "UTC",
-                "notificationSettings": {
-                    "status": "Disabled",
-                    "timeInMinutes": 30,
-                    "notificationLocale": "en"
-                },
-                "targetResourceId": "[resourceId('Microsoft.Compute/virtualMachines', parameters('virtualMachines_Web_tierVM1_name'))]"
-            }
-        },
-        {
-            "type": "microsoft.devtestlab/schedules",
-            "apiVersion": "2018-09-15",
-            "name": "[parameters('schedules_shutdown_computevm_web_tiervm2_name')]",
-            "location": "eastus",
-            "dependsOn": [
-                "[resourceId('Microsoft.Compute/virtualMachines', parameters('virtualMachines_Web_tierVM2_name'))]"
-            ],
-            "tags": {
-                "Wis": "Wis"
-            },
-            "properties": {
-                "status": "Enabled",
-                "taskType": "ComputeVmShutdownTask",
-                "dailyRecurrence": {
-                    "time": "1900"
-                },
-                "timeZoneId": "UTC",
-                "notificationSettings": {
-                    "status": "Disabled",
-                    "timeInMinutes": 30,
-                    "notificationLocale": "en"
-                },
-                "targetResourceId": "[resourceId('Microsoft.Compute/virtualMachines', parameters('virtualMachines_Web_tierVM2_name'))]"
-            }
-        },
-        {
             "type": "Microsoft.Network/loadBalancers",
             "apiVersion": "2023-09-01",
             "name": "[parameters('loadBalancers_Wis_TestLB_name')]",
-            "location": "eastus",
+            "location": "[resourceGroup().location]",
             "dependsOn": [
                 "[resourceId('Microsoft.Network/virtualNetworks/subnets', parameters('virtualNetworks_Test_VN_name'), 'Web-tierSubnet')]"
             ],
@@ -787,7 +701,7 @@
             "type": "Microsoft.Network/virtualNetworks",
             "apiVersion": "2023-09-01",
             "name": "[parameters('virtualNetworks_TestAppGw_name')]",
-            "location": "eastus",
+            "location": "[resourceGroup().location]",
             "dependsOn": [
                 "[resourceId('Microsoft.Network/applicationGateways', parameters('applicationGateways_TestAppGw_name'))]"
             ],
@@ -9924,7 +9838,7 @@
                 "administratorType": "ActiveDirectory",
                 "login": "Test@remonicjbyahooco.onmicrosoft.com",
                 "sid": "fe32d408-2c78-407e-9faf-3dc9d2599e6f",
-                "tenantId": "bc5585e5-c9bd-4b46-94e2-28ef0bfdfa23"
+                "tenantId": "[subscription().tenantId]"
             }
         },
         {
@@ -10037,7 +9951,7 @@
             "type": "Microsoft.Sql/servers/connectionPolicies",
             "apiVersion": "2023-05-01-preview",
             "name": "[concat(parameters('servers_servertest_sql_name'), '/default')]",
-            "location": "eastus",
+            "location": "[resourceGroup().location]",
             "dependsOn": [
                 "[resourceId('Microsoft.Sql/servers', parameters('servers_servertest_sql_name'))]"
             ],
@@ -10049,7 +9963,7 @@
             "type": "Microsoft.Sql/servers/databases",
             "apiVersion": "2023-05-01-preview",
             "name": "[concat(parameters('servers_servertest_sql_name'), '/Test-SqlDB')]",
-            "location": "eastus",
+            "location": "[resourceGroup().location]",
             "dependsOn": [
                 "[resourceId('Microsoft.Sql/servers', parameters('servers_servertest_sql_name'))]"
             ],
@@ -10299,7 +10213,7 @@
             "type": "Microsoft.Compute/availabilitySets",
             "apiVersion": "2023-03-01",
             "name": "[parameters('availabilitySets_Web_tierVM_name')]",
-            "location": "eastus",
+            "location": "[resourceGroup().location]",
             "dependsOn": [
                 "[resourceId('Microsoft.Compute/virtualMachines', parameters('virtualMachines_Web_tierVM1_name'))]",
                 "[resourceId('Microsoft.Compute/virtualMachines', parameters('virtualMachines_Web_tierVM2_name'))]"
@@ -10324,7 +10238,7 @@
             "type": "Microsoft.Compute/virtualMachines",
             "apiVersion": "2023-03-01",
             "name": "[parameters('virtualMachines_Web_tierVM1_name')]",
-            "location": "eastus",
+            "location": "[resourceGroup().location]",
             "dependsOn": [
                 "[resourceId('Microsoft.Compute/availabilitySets', parameters('availabilitySets_Web_tierVM_name'))]",
                 "[resourceId('Microsoft.Network/networkInterfaces', parameters('networkInterfaces_web_tiervm174_name'))]"
@@ -10406,7 +10320,7 @@
             "type": "Microsoft.Compute/virtualMachines",
             "apiVersion": "2023-03-01",
             "name": "[parameters('virtualMachines_Web_tierVM2_name')]",
-            "location": "eastus",
+            "location": "[resourceGroup().location]",
             "dependsOn": [
                 "[resourceId('Microsoft.Compute/availabilitySets', parameters('availabilitySets_Web_tierVM_name'))]",
                 "[resourceId('Microsoft.Network/networkInterfaces', parameters('networkInterfaces_web_tiervm2291_name'))]"
@@ -10491,7 +10405,7 @@
             "type": "Microsoft.Network/applicationGateways",
             "apiVersion": "2023-09-01",
             "name": "[parameters('applicationGateways_TestAppGw_name')]",
-            "location": "eastus",
+            "location": "[resourceGroup().location]",
             "dependsOn": [
                 "[resourceId('Microsoft.Network/virtualNetworks/subnets', parameters('virtualNetworks_TestAppGw_name'), 'default')]",
                 "[resourceId('Microsoft.Network/publicIPAddresses', parameters('publicIPAddresses_TestAppGwIPpublic_name'))]"
@@ -10865,7 +10779,7 @@
             "type": "Microsoft.Network/networkInterfaces",
             "apiVersion": "2023-09-01",
             "name": "[parameters('networkInterfaces_db_tiervm796_z3_name')]",
-            "location": "eastus",
+            "location": "[resourceGroup().location]",
             "dependsOn": [
                 "[resourceId('Microsoft.Network/publicIPAddresses', parameters('publicIPAddresses_DB_tierVM_ip_name'))]",
                 "[resourceId('Microsoft.Network/virtualNetworks/subnets', parameters('virtualNetworks_Test_VN_name'), 'DB-tierSubnet')]",
@@ -10880,7 +10794,6 @@
                     {
                         "name": "ipconfig1",
                         "id": "[concat(resourceId('Microsoft.Network/networkInterfaces', parameters('networkInterfaces_db_tiervm796_z3_name')), '/ipConfigurations/ipconfig1')]",
-                        "etag": "W/\"30b131aa-48a8-48cb-8dea-0bd2a68ca0a3\"",
                         "type": "Microsoft.Network/networkInterfaces/ipConfigurations",
                         "properties": {
                             "provisioningState": "Succeeded",
@@ -10918,7 +10831,7 @@
             "type": "Microsoft.Network/networkInterfaces",
             "apiVersion": "2023-09-01",
             "name": "[parameters('networkInterfaces_web_tiervm174_name')]",
-            "location": "eastus",
+            "location": "[resourceGroup().location]",
             "dependsOn": [
                 "[resourceId('Microsoft.Network/publicIPAddresses', parameters('publicIPAddresses_Web_tierVM1_ip_name'))]",
                 "[resourceId('Microsoft.Network/virtualNetworks/subnets', parameters('virtualNetworks_Test_VN_name'), 'DB-tierSubnet')]",
@@ -10974,7 +10887,7 @@
             "type": "Microsoft.Network/networkInterfaces",
             "apiVersion": "2023-09-01",
             "name": "[parameters('networkInterfaces_web_tiervm2291_name')]",
-            "location": "eastus",
+            "location": "[resourceGroup().location]",
             "dependsOn": [
                 "[resourceId('Microsoft.Network/publicIPAddresses', parameters('publicIPAddresses_Web_tierVM2_ip_name'))]",
                 "[resourceId('Microsoft.Network/virtualNetworks/subnets', parameters('virtualNetworks_Test_VN_name'), 'DB-tierSubnet')]",
